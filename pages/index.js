@@ -7,10 +7,10 @@ export default function Home() {
   return (
     <main className="bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url('/fundo-mar.png')` }}>
       <div className="min-h-screen flex flex-col justify-center items-center">
-      <div className="   ">
+        <div>
           <h1 className="text-white text-5xl font-extralight tracking-widest">ÁGUA VIVA</h1>
           <h2 className="text-white text-2xl font-extralight tracking-widest">SURF ACADEMY</h2>
-      </div>
+        </div>
         <Link href={"/classes"} passHref>
           <p className="p-5 px-11 mt-20 bg-yellow text-darkBlue text-2xl font-extralight tracking-widest rounded-xl">Iniciar Sessão</p>
         </Link>
