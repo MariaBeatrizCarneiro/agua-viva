@@ -10,7 +10,7 @@ async function getActivities() {
 }
 
 //EVENTS THAT THE USER IS NOT A PARTICIPANT - SUGGESTIONS
-async function getEvents() {
+async function getEvents(id) {
     const collection = await connectToCollection(collectionName)
     const events = await collection.find({
         participants: { $nin: [id] },
@@ -48,4 +48,18 @@ async function getMyEvents(id) {
 
     return myEvents
 }
-module.exports = { getActivities, getMyClasses, getClasses, getMyEvents, getEvents }
+
+async function getEventById(eventId){
+    const collection = await connectToCollection(collectionName);
+    const event = await collection.findOne({ _id: new ObjectId(eventId) });
+    return event;
+}
+
+async function getClassById(classId){
+    const collection = await connectToCollection(collectionName);
+    const class_ = await collection.findOne({ _id: new ObjectId(classId) });
+    return class_;
+}
+
+
+module.exports = { getActivities, getMyClasses, getClasses, getMyEvents, getEvents, getEventById, getClassById }
