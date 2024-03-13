@@ -86,8 +86,8 @@ export default function Classes() {
               </div>
               }
             </div>
-            <button onClick={handleClickParticipar} className={`w-full py-2 mt-2 rounded-xl shadow-md focus:outline-none font-bold ${ participando ? 'bg-gray-400 text-white' : 'bg-yellow text-darkBlue'}`}>
-              {participando ? '✓ Adicionado à Aula' : 'Participar'}
+            <button onClick={handleClickParticipar} className={`w-full p-2 mt-2 rounded-xl shadow-md focus:outline-none font-bold ${ participando ? 'bg-gray-400 text-white' : 'bg-yellow text-darkBlue'}`}>
+              {participando ? 'Adicionado à Aula' : 'Participar'}
             </button>
           </div>
           <img className="w-1/2" src="https://images.pexels.com/photos/5232511/pexels-photo-5232511.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Surf Lesson"/>
