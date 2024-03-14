@@ -1,5 +1,6 @@
 import Navbar from "../components/Navbar";
 import Menu from "../components/Menu";
+import { points } from '../../utils/globals.js';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { useEffect, useState } from "react";
@@ -66,31 +67,31 @@ export default function Profile() {
       <div className="top-0 fixed w-full mb-2 z-40">
         <Navbar />
       </div>
-      <div className="top-24 mb-96 fixed bg-white z-40 w-full">
+      <div className="top-20 mb-96 fixed bg-white z-40 w-full">
         {userData && (
-          <div className="flex flex-row gap-4 py-1 m-4 items-center">
+          <div className="flex p-4 gap-4">
             <img className="rounded-3xl h-48 w-48" src={userData.photoLink} alt="User" />
-            <div className="flex flex-col gap-2">
-              <p className="text-2xl">{userData.name}</p>
-              <p>{userData.age}</p>
-              <p>{userData.type}</p>
-              <p>{userData.level}</p>
+            <div className="flex flex-col">
+              <p className="text-3xl font-semibold pb-2">{userData.name}</p>
+              <p className="font-semibold pb-1">{userData.age}</p>
+              <p className="font-semibold pb-1">{userData.type}</p>
+              <p className="font-semibold pb-1">{userData.level}</p>
+              <div className='flex items-center justify-center py-3'>
+                <p className='text-3xl'>🎯</p>
+                <h1 className="text-2xl text-darkBlue font-bold ps-2">{points} Pontos</h1>
+              </div>
             </div>
           </div>
         )}
-        {userData && (
-          <div>
-            <p className="py-2 ml-4 mb-2 text-3xl font-bold text-darkBlue bg-white">{userData.points} Pontos</p>
-          </div>
-        )}
+
       </div>
-      <div className="mt-96 mb-24 ml-4 mr-4">
-        <h1 className="m-3 text-2xl font-normal">As minhas aulas</h1>
+      <div className="mt-96 mb-40 ml-4 mr-4">
+        <h1 className="m-3 text-3xl font-bold">🏄🏼‍♂️ As minhas aulas</h1>
         <Carousel>
-          <CarouselContent className="pl-0">
+          <CarouselContent className="p-4">
             {classesData && classesData.userClasses.map((userClass) => (
               <CarouselItem key={userClass._id} className="basis-1/2">
-                <Card className="rounded-xl bg-gray-100 overflow-hidden p-2 h-44">
+                <Card className="rounded-xl bg-gray-100 overflow-hidden p-4 h-full">
                   <CardContent>
                     <p className="mb-2 font-semibold text-lg text-darkBlue">{formatDateTime(userClass.date)}</p>
                     <p> <span className="font-semibold text-darkBlue">Duração:</span> {userClass.duration}</p>
@@ -103,12 +104,12 @@ export default function Profile() {
             ))}
           </CarouselContent>
         </Carousel>
-        <h1 className="m-4 text-2xl">Os meus eventos</h1>
+        <h1 className="m-3 pt-10 text-3xl font-bold">🗓️ Os meus eventos</h1>
         <Carousel>
-          <CarouselContent className="pl-0">
+          <CarouselContent className="p-4">
             {eventsData && eventsData.userEvents.map((userEvent) => (
               <CarouselItem key={userEvent._id} className="basis-1/2">
-                <Card className="rounded-xl bg-yellow p-2 overflow-hidden h-64">
+                <Card className="rounded-xl bg-yellow p-4 overflow-hidden h-full">
                   <CardContent>
                     <p className="font-bold text-lg mb-2 text-darkBlue">{userEvent.name}</p>
                     <p><span className="text-darkBlue font-semibold">Data:</span> {formatDateTime(userEvent.date)}</p>
@@ -120,12 +121,12 @@ export default function Profile() {
             ))}
           </CarouselContent>
         </Carousel>
-        <h1 className="m-4 text-2xl">Os meus cupões</h1>
+        <h1 className="m-3 pt-10 text-3xl font-bold">🎟️ Os meus cupões</h1>
         <Carousel>
-          <CarouselContent className="pl-0">
+          <CarouselContent className="p-4 pb-4">
             {couponsData && couponsData.userRedeemableCoupons.map((userCoupon) => (
               <CarouselItem key={userCoupon._id} className="basis-1/2">
-                <Card className="rounded-xl">
+                <Card className="rounded-xl p-4 h-full">
                   <CardContent>
                     <p className="text-5xl text-darkBlue font-semibold">{userCoupon.value}<span className="text-4xl">%</span></p>
                     <p>{userCoupon.description}</p>
