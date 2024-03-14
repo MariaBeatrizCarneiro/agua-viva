@@ -10,7 +10,7 @@ export async function getUserById(id){
 }
 
 export async function getUsers(){
-    const collection = connectToCollection(collectionName)
-    const users = await collection.find().toArray
+    const collection = await connectToCollection(collectionName)
+    const users = await collection.find().toArray()
     return users
 }
