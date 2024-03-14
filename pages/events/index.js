@@ -111,34 +111,40 @@ export default function Events() {
                       </div>
                     </div>
                   ))}
-                  <div onClick={() => toggleParticipantsList(e._id)}>
-                    <div className="font-bold text-darkBlue mb-2">Participantes:</div>
-                    {selectedEventId === e._id ? (
-                      <div>
-                        {e.participants.map((participantId) => {
-                          const participant = users.find(user => user._id === participantId);
-                          return (
-                            <div className="flex items-center mb-2" key={participant._id}>
-                              <img className="w-8 h-8 rounded-full mr-2" src={participant.photoLink} alt="Participant"/>
-                              <span>{participant.name}</span>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    ): (
-                      <div className='flex'>
-                        {e.participants.map((participantId) => {
-                          const participant = users.find(user => user._id === participantId);
-                          return (
-                            <div className="flex items-center mb-2" key={participant._id}>
-                              <img className="w-8 h-8 rounded-full mr-2" src={participant.photoLink} alt="Participant"/>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    )
-                    }
-                  </div>
+                    <div onClick={() => toggleParticipantsList(e._id)}>
+                      <div className="font-bold text-darkBlue mb-2">Participantes:</div>
+                      {selectedEventId === e._id ? (
+                        <div>
+                          {e.participants.map((participantId) => {
+                            const participant = users.find(user => user._id === participantId);
+                            if (participant) {
+                              return (
+                                <div className="flex items-center mb-2" key={participant._id}>
+                                  <img className="w-8 h-8 rounded-full mr-2" src={participant.photoLink} alt="Participant"/>
+                                  <span>{participant.name}</span>
+                                </div>
+                              );
+                            }
+                            return null;
+                          })}
+                        </div>
+                      ) : (
+                        <div className='flex'>
+                          {e.participants.map((participantId) => {
+                            const participant = users.find(user => user._id === participantId);
+                            if (participant) {
+                              return (
+                                <div className="flex items-center mb-2" key={participant._id}>
+                                  <img className="w-8 h-8 rounded-full mr-2" src={participant.photoLink} alt="Participant"/>
+                                </div>
+                              );
+                            }
+                            return null;
+                          })}
+                        </div>
+                      )}
+                    </div>
+
                   <button onClick={() => handleClickParticipar(e._id)} className={`w-full p-2 mt-2 rounded-xl shadow-md focus:outline-none font-bold ${participatingEvents[e._id] ? 'bg-gray-400 text-white' : 'bg-yellow text-darkBlue'}`}>
                     {participatingEvents[e._id] ? 'Adicionado ao evento' : 'Participar'}
                   </button>
