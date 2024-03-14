@@ -90,10 +90,9 @@ export default function Profile() {
           <CarouselContent className="pl-0">
             {classesData && classesData.userClasses.map((userClass) => (
               <CarouselItem key={userClass._id} className="basis-1/2">
-                <Card className="rounded-xl bg-gray-100 overflow-hidden shadow-lg">
+                <Card className="rounded-xl bg-gray-100 overflow-hidden p-2 h-44">
                   <CardContent>
-                    <button className="flex rounded-3xl bg-white shadow-md text-center align-center text-darkBlue font-light text-sm px-2 py-1 w-fit mt-2 ml-2 items-end">x</button>
-                    <p className="mb-2 font-semibold text-darkBlue">{formatDateTime(userClass.date)}</p>
+                    <p className="mb-2 font-semibold text-lg text-darkBlue">{formatDateTime(userClass.date)}</p>
                     <p> <span className="font-semibold text-darkBlue">Duração:</span> {userClass.duration}</p>
                     <p> <span className="font-semibold text-darkBlue">Local:</span> {userClass.location}</p>
                   </CardContent>
@@ -109,17 +108,13 @@ export default function Profile() {
           <CarouselContent className="pl-0">
             {eventsData && eventsData.userEvents.map((userEvent) => (
               <CarouselItem key={userEvent._id} className="basis-1/2">
-                <Card className="rounded-xl">
+                <Card className="rounded-xl bg-yellow p-2 overflow-hidden h-64">
                   <CardContent>
-                    <p>{userEvent.name}</p>
-                    <p>Date: {new Date(userEvent.date).toLocaleDateString()}</p>
-                    <p>Duration: {userEvent.duration}</p>
-                    <p>Location: {userEvent.location}</p>
-                    <p>Points to Earn: {userEvent.pointsToEarn}</p>
+                    <p className="font-bold text-lg mb-2 text-darkBlue">{userEvent.name}</p>
+                    <p><span className="text-darkBlue font-semibold">Data:</span> {formatDateTime(userEvent.date)}</p>
+                    <p><span className="text-darkBlue font-semibold">Duração:</span> {userEvent.duration}</p>
+                    <p><span className="text-darkBlue font-semibold">Local:</span> {userEvent.location}</p>
                   </CardContent>
-                  <CardFooter>
-                    <p>Organizer: {userEvent.organizer}</p>
-                  </CardFooter>
                 </Card>
               </CarouselItem>
             ))}
