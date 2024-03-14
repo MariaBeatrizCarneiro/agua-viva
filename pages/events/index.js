@@ -87,7 +87,7 @@ export default function Events() {
           ) : (
             events.map(e => (
               <div className="max-w-md mx-auto my-4 bg-gray-100 rounded-xl overflow-hidden shadow-lg relative" key={e._id}>
-                <img className="w-full h-40" src={e.photoUrl} alt="Event Photo"/>
+                <img className="w-full object-cover h-40" src={e.photoUrl} alt="Event Photo"/>
                 <div className="p-4">
                   <div className="font-bold text-2xl mb-2 text-darkBlue" onClick={() => toggleEventDescription(e._id)} style={{ cursor: 'pointer' }}>{e.name}</div>
                   {selectedEventId === e._id && showEventDescription[e._id] && (
