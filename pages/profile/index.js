@@ -28,7 +28,7 @@ export default function Profile() {
       const userResponse = await fetch(`/api/user/65f1c9891601ab21c6c281fe`);
       const classesResponse = await fetch(`/api/user/65f1c9891601ab21c6c281fe/myClasses`);
       const eventsResponse = await fetch(`/api/user/65f1c9891601ab21c6c281fe/myEvents`);
-      const couponsResponse = await fetch(`/api/user/65f1c9891601ab21c6c281fe/myCoupons`);
+      const couponsResponse = await fetch(`/api/user/65f1c9891601ab21c6c281fe/myRedeemableCoupons`);
 
       if (userResponse.ok && classesResponse.ok && eventsResponse.ok && couponsResponse.ok) {
         const userData = await userResponse.json();
@@ -123,12 +123,12 @@ export default function Profile() {
         <h1 className="m-4 text-2xl">Os meus cupões</h1>
         <Carousel>
           <CarouselContent className="pl-0">
-            {couponsData && couponsData.userCoupons.map((userCoupon) => (
+            {couponsData && couponsData.userRedeemableCoupons.map((userCoupon) => (
               <CarouselItem key={userCoupon._id} className="basis-1/2">
                 <Card className="rounded-xl">
                   <CardContent>
-                    <p>Description: {userCoupon.description}</p>
-                    <p>Value: {userCoupon.value}</p>
+                    <p className="text-6xl">{userCoupon.value}<span className="text-4xl">%</span></p>
+                    <p>{userCoupon.description}</p>
                     <p>Points Required: {userCoupon.pointsRequired}</p>
                     <p>Redeemed: {userCoupon.redeemed ? "Yes" : "No"}</p>
                   </CardContent>
