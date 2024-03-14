@@ -73,15 +73,15 @@ export default function Events() {
   }
 
   return (
-    <main className="items-center justify-between">
-      <div className="top-0 fixed w-full">
+    <main className="relative z-0 items-center justify-between">
+      <div className="top-0 fixed w-full z-50">
         <Navbar />
       </div>
 
       <div className="my-24 mx-4 flex-grow ">
         <h1 className="text-3xl text-darkBlue font-bold py-3">Próximos Eventos:</h1>
 
-        <div>
+        <div className='z-0'>
           {events.length === 0 ? (
             <p>Não existe nenhum evento para se inscrever.</p>
           ) : (

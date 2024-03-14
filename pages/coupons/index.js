@@ -39,8 +39,8 @@ export default function Coupons() {
   }, []);
 
   return (
-    <main className="items-center justify-between">
-      <div className="top-0 fixed w-full">
+    <main className="relative items-center justify-between z-0">
+      <div className="top-0 fixed w-full z-50">
         <Navbar />
       </div>
 
@@ -51,7 +51,7 @@ export default function Coupons() {
         </div>
         
 
-        <div>
+        <div className='z-0'>
           {coupons.length === 0 ? (
             <p>Não existe nenhum cupão.</p>
           ) : (
