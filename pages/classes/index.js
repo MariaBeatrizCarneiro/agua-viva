@@ -1,8 +1,13 @@
+import { useState, useEffect } from 'react';
 import Navbar from "../components/Navbar";
 import Menu from "../components/Menu";
-import { useState } from 'react';
+
 
 export default function Classes() {
+  const [classes, setClasses] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [participando, setParticipando] = useState(false);
+  const [showParticipantsList, setShowParticipantsList] = useState(false);
   const [participantes, setParticipantes] = useState([
     {
       nome: 'Bia',
@@ -17,8 +22,41 @@ export default function Classes() {
       foto: 'https://i.pinimg.com/originals/16/e5/6a/16e56afc81ef2a882b4c8a195af98e2d.jpg',
     },
   ]);
-  const [participando, setParticipando] = useState(false);
-  const [showParticipantsList, setShowParticipantsList] = useState(false);
+
+  useEffect(() => {
+    async function fetchClasses() {
+      try {
+        const response = await fetch(`/api/user/65f1c9891601ab21c6c281fe/classes`);
+        if (!response.ok) {
+          throw new Error('Erro ao carregar classes');
+        }
+        const data = await response.json();
+        setClasses(data.classes);
+      } catch (error) {
+        console.error('Erro ao carregar classes:', error);
+      }
+    }
+    fetchClasses();
+  }, []);
+
+  useEffect(() => {
+    async function fetchUsers() {
+      try {
+        const response = await fetch('/api/user');
+        if (!response.ok) {
+          throw new Error('Erro ao carregar usuários');
+        }
+        const data = await response.json();
+        console.log(data);
+        setUsers([data.user]);
+      } catch (error) {
+        console.error('Erro ao carregar usuários:', error);
+      }
+    }
+    fetchUsers();
+  }, []);
+
+  console.log(users)
 
   const handleClickParticipar = () => {
     if (!participando) {
@@ -38,6 +76,19 @@ export default function Classes() {
   const toggleParticipantsList = () => {
     setShowParticipantsList(!showParticipantsList);
   };
+
+  // Função para formatar a data
+  function formatDate(date) {
+    const options = {
+      day: 'numeric',
+      month: 'long',
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true
+    };
+
+    return date.toLocaleString('pt-BR', options);
+  }
 
   return (
     <main className="items-center justify-between">
@@ -91,6 +142,76 @@ export default function Classes() {
             </button>
           </div>
           <img className="w-1/2" src="https://images.pexels.com/photos/5232511/pexels-photo-5232511.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Surf Lesson"/>
+        </div>
+
+
+
+
+
+
+
+
+        <div>
+          {classes.map(e => 
+            <div className="max-w-md mx-auto my-4 bg-white rounded-xl overflow-hidden shadow-lg flex">
+              <div className="p-4 flex-grow">
+              <div className="font-bold text-xl mb-2 text-darkBlue">
+                {e.date}
+              </div>
+                <div className="mb-2">
+                  <span className="font-bold text-darkBlue">Duração: </span>{e.duration}
+                </div>
+                <div className="mb-2">
+                  <span className="font-bold text-darkBlue">Local: </span>{e.location}
+                </div>
+                <div className="flex items-center mb-4">
+                  <img
+                    className="w-8 h-8 rounded-full mr-4"
+                    src={e.organizer}
+                    alt="Instructor"
+                  />
+                  <div className="text-sm">
+                    <div className="font-bold text-darkBlue">Professor</div>
+                    <div className="text-darkBlue">{e.organizer}</div>
+                  </div>
+                </div>
+                <div onClick={toggleParticipantsList}>
+                  <div className="font-bold text-darkBlue mb-2">Participantes:</div>
+                  {showParticipantsList == true ? (
+                    <div>
+                      {e.participants.map((participant, index) => (
+                        <div key={index} className="flex items-center mb-2">
+                          <img className="w-8 h-8 rounded-full mr-2" src={participant} alt="Participant"/>
+                          <span>{participant}</span>
+                        </div>
+                      ))}
+                    </div>
+                  ):
+                  <div className="flex flex-wrap">
+                    {e.participants.map((participant, index) => (
+                      <img key={index} className="w-8 h-8 rounded-full mr-2 cursor-pointer" src={participant} alt="Participant"/>
+                    ))}
+                  </div>
+                  }
+                </div>
+                <button onClick={handleClickParticipar} className={`w-full p-2 mt-2 rounded-xl shadow-md focus:outline-none font-bold ${ participando ? 'bg-gray-400 text-white' : 'bg-yellow text-darkBlue'}`}>
+                  {participando ? 'Adicionado à Aula' : 'Participar'}
+                </button>
+              </div>
+              <img className="w-1/2" src={e.photoUrl} alt="Surf Lesson"/>
+            </div>
+          )}
+        </div>
+
+
+        <div>
+          {users.map((user, index) => (
+            <div key={index}>
+              <p>ID: {user._id}</p>
+              <p>Nome: {user.name}</p>
+              <img className="w-1/2" src={user.photoLink} alt="Surf Lesson"/>
+            </div>
+          ))}
         </div>
       </div>
 
