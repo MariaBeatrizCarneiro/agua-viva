@@ -1,52 +1,53 @@
 const { connectToCollection } = require("./mongodb");
 import { ObjectId } from 'mongodb';
 
-const collectionName = "activities"
+const collectionName = "activities";
+const currentDate = new Date();
 
 async function getActivities() {
-    const collection = await connectToCollection(collectionName)
-    const result = await collection.find().toArray()
-    return result
+    const collection = await connectToCollection(collectionName);
+    const result = await collection.find({ date: { $gt: currentDate } }).sort({ date: 1 }).toArray();
+    return result;
 }
 
-//EVENTS THAT THE USER IS NOT A PARTICIPANT - SUGGESTIONS
 async function getEvents(id) {
-    const collection = await connectToCollection(collectionName)
+    const collection = await connectToCollection(collectionName);
     const events = await collection.find({
         participants: { $nin: [id] },
-        type: "event"
-    }).toArray()
-    return events
+        type: "event",
+        date: { $gt: currentDate }
+    }).sort({ date: 1 }).toArray();
+    return events;
 }
 
-//CLASSES THAT THE USER IS NOT A PARTICIPANT - SUGGESTIONS
 async function getClasses(id) {
-    const collection = await connectToCollection(collectionName)
+    const collection = await connectToCollection(collectionName);
     const classes = await collection.find({
         participants: { $nin: [id] },
-        type: "class"
-    }).toArray()
-    return classes
+        type: "class",
+        date: { $gt: currentDate }
+    }).sort({ date: 1 }).toArray();
+    return classes;
 }
 
 async function getMyClasses(id) {
     const collection = await connectToCollection(collectionName);
     const myClasses = await collection.find({
         participants: id,
-        type: "class"
-    }).toArray();
-
-    return myClasses
+        type: "class",
+        date: { $gt: currentDate }
+    }).sort({ date: 1 }).toArray();
+    return myClasses;
 }
 
 async function getMyEvents(id) {
     const collection = await connectToCollection(collectionName);
     const myEvents = await collection.find({
         participants: id,
-        type: "event"
-    }).toArray();
-
-    return myEvents
+        type: "event",
+        date: { $gt: currentDate }
+    }).sort({ date: 1 }).toArray();
+    return myEvents;
 }
 
 async function getEventById(eventId){

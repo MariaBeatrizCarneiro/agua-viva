@@ -27,4 +27,10 @@ async function getMyRedeemableCoupons(id) {
     return myRedeemableCoupons;
 }
 
-module.exports = { getAllMyCoupons, getMyRedeemableCoupons }
+async function getCouponById(couponId){
+    const collection = await connectToCollection(collectionName);
+    const coupon = await collection.findOne({ _id: new ObjectId(couponId) });
+    return coupon;
+}
+
+module.exports = { getAllMyCoupons, getMyRedeemableCoupons, getCouponById }
