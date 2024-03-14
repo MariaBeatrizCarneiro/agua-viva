@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { getPoints, increasePoints } from '../../utils/globals.js';
 import Navbar from "../components/Navbar";
 import Menu from "../components/Menu";
 import { format } from 'date-fns';
@@ -48,6 +49,12 @@ export default function Classes() {
       updatedParticipatingClasses[classId] = !prevState[classId];
       return updatedParticipatingClasses;
     });
+
+    if (!participatingClasses[classId]) {
+      increasePoints(25);
+    } else {
+      increasePoints(-25);
+    }
   };
 
   const toggleParticipantsList = (classId) => {
@@ -68,14 +75,17 @@ export default function Classes() {
       </div>
 
       <div className="my-24 mx-4 flex-grow">
-        <h1 className="text-3xl text-darkBlue font-bold py-3">Próximas Aulas:</h1>
+        <div className='flex items-center'>
+          <p className='text-5xl ps-3'>🏄🏼‍♂️</p>
+          <h1 className="text-3xl text-darkBlue font-bold py-3 ps-3">Próximas Aulas:</h1>
+        </div>
 
         <div>
           {classes.length === 0 ? (
             <p>Não existe nenhuma aula para se inscrever.</p>
           ) : (
             classes.map(e => (
-              <div className="max-w-md mx-auto my-4 bg-gray-100 rounded-xl overflow-hidden shadow-lg relative" key={e._id}>
+              <div className="max-w-lg mx-auto my-4 bg-gray-100 rounded-xl overflow-hidden shadow-lg relative" key={e._id}>
                 <div className="p-4">
                   <div className="font-bold text-xl mb-2 text-darkBlue">
                     {formatDateTime(e.date)}
