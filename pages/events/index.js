@@ -90,7 +90,7 @@ export default function Events() {
 
       <div className="my-24 mx-4 flex-grow ">
         <div className='flex items-center'>
-          <p className='text-5xl ps-3'>🗓️</p>
+          <p className='text-4xl ps-3'>🗓️</p>
           <h1 className="text-3xl text-darkBlue font-bold py-3 ps-3">Próximos Eventos:</h1>
         </div>
 
