@@ -4,12 +4,11 @@ import Menu from "../components/Menu";
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
-
 export default function Classes() {
   const [classes, setClasses] = useState([]);
   const [users, setUsers] = useState([]);
-  const [showParticipantsList, setShowParticipantsList] = useState(false);
-  const [participando, setParticipando] = useState(false);
+  const [selectedClassId, setSelectedClassId] = useState(null);
+  const [participatingClasses, setParticipatingClasses] = useState({});
 
   useEffect(() => {
     async function fetchClasses() {
@@ -43,18 +42,22 @@ export default function Classes() {
     fetchUsers();
   }, []);
 
-  const handleClickParticipar = () => {
-    setParticipando(!participando);
+  const handleClickParticipar = (classId) => {
+    setParticipatingClasses(prevState => {
+      const updatedParticipatingClasses = { ...prevState };
+      updatedParticipatingClasses[classId] = !prevState[classId];
+      return updatedParticipatingClasses;
+    });
   };
 
-  const toggleParticipantsList = () => {
-    setShowParticipantsList(!showParticipantsList);
+  const toggleParticipantsList = (classId) => {
+    setSelectedClassId(prevId => (prevId === classId ? null : classId));
   };
 
   function formatDateTime(date) {
-    const formattedDate = format(new Date(date), "dd 'de' MMMM 'às' hh:mm a", { locale: ptBR });
-    const parts = formattedDate.split(' ');
-    parts[2] = parts[2].charAt(0).toUpperCase() + parts[2].slice(1); // Capitalizando a primeira letra do mês
+    const formatedDate = format(new Date(date), "dd 'de' MMMM 'às' hh:mm a", { locale: ptBR });
+    const parts = formatedDate.split(' ');
+    parts[2] = parts[2].charAt(0).toUpperCase() + parts[2].slice(1);
     return parts.join(' ');
   }
 
@@ -92,31 +95,36 @@ export default function Classes() {
                       </div>
                     </div>
                   ))}
-                  <div onClick={toggleParticipantsList}>
+                  <div onClick={() => toggleParticipantsList(e._id)}>
                     <div className="font-bold text-darkBlue mb-2">Participantes:</div>
-                    {showParticipantsList == true ? (
+                    {selectedClassId === e._id ? (
                       <div>
-                        {e.participants.map((participant) => (
-                          users.filter(user => user._id === participant).map(u => (
-                            <div className="flex items-center mb-2">
-                              <img className="w-8 h-8 rounded-full mr-2" src={u.photoLink} alt="Participant"/>
-                              <span>{u.name}</span>
+                        {e.participants.map((participantId) => {
+                          const participant = users.find(user => user._id === participantId);
+                          return (
+                            <div className="flex items-center mb-2" key={participant._id}>
+                              <img className="w-8 h-8 rounded-full mr-2" src={participant.photoLink} alt="Participant"/>
+                              <span>{participant.name}</span>
                             </div>
-                          ))
-                        ))}
+                          );
+                        })}
                       </div>
-                    ) : (
-                      <div className="flex flex-wrap">
-                        {e.participants.map((participant) => (
-                          users.filter(user => user._id === participant).map(u => (
-                            <img className="w-8 h-8 rounded-full mr-2 cursor-pointer" src={u.photoLink} alt="Participant"/>
-                          ))
-                        ))}
+                    ): (
+                      <div className='flex'>
+                        {e.participants.map((participantId) => {
+                          const participant = users.find(user => user._id === participantId);
+                          return (
+                            <div className="flex items-center mb-2" key={participant._id}>
+                              <img className="w-8 h-8 rounded-full mr-2" src={participant.photoLink} alt="Participant"/>
+                            </div>
+                          );
+                        })}
                       </div>
-                    )}
+                    )
+                    }
                   </div>
-                  <button onClick={() => handleClickParticipar(e._id)} className={`w-full p-2 mt-2 rounded-xl shadow-md focus:outline-none font-bold ${participando ? 'bg-gray-400 text-white' : 'bg-yellow text-darkBlue'}`}>
-                    {participando ? 'Adicionado à Aula' : 'Participar'}
+                  <button onClick={() => handleClickParticipar(e._id)} className={`w-full p-2 mt-2 rounded-xl shadow-md focus:outline-none font-bold ${participatingClasses[e._id] ? 'bg-gray-400 text-white' : 'bg-yellow text-darkBlue'}`}>
+                    {participatingClasses[e._id] ? 'Adicionado à Aula' : 'Participar'}
                   </button>
                 </div>
                 <div className="absolute top-3 right-3 p-2 bg-white rounded-xl">
@@ -131,7 +139,7 @@ export default function Classes() {
       </div>
 
       <div className="bottom-0 fixed w-full">
-          <Menu />
+        <Menu />
       </div>
     </main>
   );
