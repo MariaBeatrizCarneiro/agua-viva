@@ -1,27 +1,15 @@
 import { useState, useEffect } from 'react';
 import Navbar from "../components/Navbar";
 import Menu from "../components/Menu";
+import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 
 
 export default function Classes() {
   const [classes, setClasses] = useState([]);
   const [users, setUsers] = useState([]);
-  const [participando, setParticipando] = useState(false);
   const [showParticipantsList, setShowParticipantsList] = useState(false);
-  const [participantes, setParticipantes] = useState([
-    {
-      nome: 'Bia',
-      foto: 'https://i.pinimg.com/originals/24/b9/c7/24b9c7449f2b9bcc4f82488440b5acec.jpg',
-    },
-    {
-      nome: 'Ana',
-      foto: 'https://i.pinimg.com/originals/bb/59/dc/bb59dcd1f53f299acb5949acdfd7c4d0.jpg',
-    },
-    {
-      nome: 'Vanessa',
-      foto: 'https://i.pinimg.com/originals/16/e5/6a/16e56afc81ef2a882b4c8a195af98e2d.jpg',
-    },
-  ]);
+  const [participando, setParticipando] = useState(false);
 
   useEffect(() => {
     async function fetchClasses() {
@@ -42,13 +30,12 @@ export default function Classes() {
   useEffect(() => {
     async function fetchUsers() {
       try {
-        const response = await fetch('/api/user');
+        const response = await fetch('/api/users');
         if (!response.ok) {
           throw new Error('Erro ao carregar usuários');
         }
         const data = await response.json();
-        console.log(data);
-        setUsers([data.user]);
+        setUsers(data);
       } catch (error) {
         console.error('Erro ao carregar usuários:', error);
       }
@@ -56,38 +43,19 @@ export default function Classes() {
     fetchUsers();
   }, []);
 
-  console.log(users)
-
   const handleClickParticipar = () => {
-    if (!participando) {
-      const meuNome = 'Eu';
-      const minhaFoto = 'https://catracalivre.com.br/wp-content/uploads/2018/08/dkn57bdwsaaqp9p.jpg';
-      setParticipantes([...participantes, { nome: meuNome, foto: minhaFoto }]);
-      setParticipando(true);
-    } else {
-      const filteredParticipantes = participantes.filter(
-        participante => participante.nome !== 'Eu'
-      );
-      setParticipantes(filteredParticipantes);
-      setParticipando(false);
-    }
+    setParticipando(!participando);
   };
 
   const toggleParticipantsList = () => {
     setShowParticipantsList(!showParticipantsList);
   };
 
-  // Função para formatar a data
-  function formatDate(date) {
-    const options = {
-      day: 'numeric',
-      month: 'long',
-      hour: 'numeric',
-      minute: 'numeric',
-      hour12: true
-    };
-
-    return date.toLocaleString('pt-BR', options);
+  function formatDateTime(date) {
+    const formattedDate = format(new Date(date), "dd 'de' MMMM 'às' hh:mm a", { locale: ptBR });
+    const parts = formattedDate.split(' ');
+    parts[2] = parts[2].charAt(0).toUpperCase() + parts[2].slice(1); // Capitalizando a primeira letra do mês
+    return parts.join(' ');
   }
 
   return (
@@ -98,121 +66,68 @@ export default function Classes() {
 
       <div className="my-24 mx-4 flex-grow">
         <h1 className="text-3xl text-darkBlue font-bold py-3">Próximas Aulas:</h1>
-        <div className="max-w-md mx-auto bg-white rounded-xl overflow-hidden shadow-lg flex">
-          <div className="p-4 flex-grow">
-            <div className="font-bold text-xl mb-2 text-darkBlue">24 de Agosto</div>
-            <div className="mb-2">
-              <span className="font-bold text-darkBlue">Hora: </span>8:00 AM (2h)
-            </div>
-            <div className="mb-2">
-              <span className="font-bold text-darkBlue">Local: </span>Praia Azul
-            </div>
-            <div className="flex items-center mb-4">
-              <img
-                className="w-8 h-8 rounded-full mr-4"
-                src="https://www.angelsurfschool.com/wp-content/uploads/2018/06/kikas_angels-surf-school.jpeg"
-                alt="Instructor"
-              />
-              <div className="text-sm">
-                <div className="font-bold text-darkBlue">Professor</div>
-                <div className="text-darkBlue">Rafael</div>
-              </div>
-            </div>
-            <div onClick={toggleParticipantsList}>
-              <div className="font-bold text-darkBlue mb-2">Participantes:</div>
-              {showParticipantsList == true ? (
-                <div>
-                  {participantes.map((participante, index) => (
-                    <div key={index} className="flex items-center mb-2">
-                      <img className="w-8 h-8 rounded-full mr-2" src={participante.foto} alt="Participant"/>
-                      <span>{participante.nome}</span>
-                    </div>
-                  ))}
-                </div>
-              ):
-              <div className="flex flex-wrap">
-                {participantes.map((participante, index) => (
-                  <img key={index} className="w-8 h-8 rounded-full mr-2 cursor-pointer" src={participante.foto} alt="Participant"/>
-                ))}
-              </div>
-              }
-            </div>
-            <button onClick={handleClickParticipar} className={`w-full p-2 mt-2 rounded-xl shadow-md focus:outline-none font-bold ${ participando ? 'bg-gray-400 text-white' : 'bg-yellow text-darkBlue'}`}>
-              {participando ? 'Adicionado à Aula' : 'Participar'}
-            </button>
-          </div>
-          <img className="w-1/2" src="https://images.pexels.com/photos/5232511/pexels-photo-5232511.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Surf Lesson"/>
-        </div>
-
-
-
-
-
-
-
 
         <div>
-          {classes.map(e => 
-            <div className="max-w-md mx-auto my-4 bg-white rounded-xl overflow-hidden shadow-lg flex">
-              <div className="p-4 flex-grow">
-              <div className="font-bold text-xl mb-2 text-darkBlue">
-                {e.date}
-              </div>
-                <div className="mb-2">
-                  <span className="font-bold text-darkBlue">Duração: </span>{e.duration}
-                </div>
-                <div className="mb-2">
-                  <span className="font-bold text-darkBlue">Local: </span>{e.location}
-                </div>
-                <div className="flex items-center mb-4">
-                  <img
-                    className="w-8 h-8 rounded-full mr-4"
-                    src={e.organizer}
-                    alt="Instructor"
-                  />
-                  <div className="text-sm">
-                    <div className="font-bold text-darkBlue">Professor</div>
-                    <div className="text-darkBlue">{e.organizer}</div>
+          {classes.length === 0 ? (
+            <p>Não existe nenhuma aula para se inscrever.</p>
+          ) : (
+            classes.map(e => (
+              <div className="max-w-md mx-auto my-4 bg-gray-100 rounded-xl overflow-hidden shadow-lg relative" key={e._id}>
+                <div className="p-4">
+                  <div className="font-bold text-xl mb-2 text-darkBlue">
+                    {formatDateTime(e.date)}
                   </div>
-                </div>
-                <div onClick={toggleParticipantsList}>
-                  <div className="font-bold text-darkBlue mb-2">Participantes:</div>
-                  {showParticipantsList == true ? (
-                    <div>
-                      {e.participants.map((participant, index) => (
-                        <div key={index} className="flex items-center mb-2">
-                          <img className="w-8 h-8 rounded-full mr-2" src={participant} alt="Participant"/>
-                          <span>{participant}</span>
-                        </div>
-                      ))}
+                  <div className="mb-2">
+                    <span className="font-bold text-darkBlue">Duração: </span>{e.duration}
+                  </div>
+                  <div className="mb-2">
+                    <span className="font-bold text-darkBlue">Local: </span>{e.location}
+                  </div>
+                  {users.filter(user => user._id === e.organizer).map(u => (
+                    <div className='flex items-center mb-4' key={u._id}>
+                      <img className="w-8 h-8 rounded-full mr-2" src={u.photoLink} alt="Instructor" />
+                      <div className="text-sm">
+                        <div className="font-bold text-darkBlue">Professor</div>
+                        <div className="text-darkBlue">{u.name}</div>
+                      </div>
                     </div>
-                  ):
-                  <div className="flex flex-wrap">
-                    {e.participants.map((participant, index) => (
-                      <img key={index} className="w-8 h-8 rounded-full mr-2 cursor-pointer" src={participant} alt="Participant"/>
-                    ))}
+                  ))}
+                  <div onClick={toggleParticipantsList}>
+                    <div className="font-bold text-darkBlue mb-2">Participantes:</div>
+                    {showParticipantsList == true ? (
+                      <div>
+                        {e.participants.map((participant) => (
+                          users.filter(user => user._id === participant).map(u => (
+                            <div className="flex items-center mb-2">
+                              <img className="w-8 h-8 rounded-full mr-2" src={u.photoLink} alt="Participant"/>
+                              <span>{u.name}</span>
+                            </div>
+                          ))
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="flex flex-wrap">
+                        {e.participants.map((participant) => (
+                          users.filter(user => user._id === participant).map(u => (
+                            <img className="w-8 h-8 rounded-full mr-2 cursor-pointer" src={u.photoLink} alt="Participant"/>
+                          ))
+                        ))}
+                      </div>
+                    )}
                   </div>
-                  }
+                  <button onClick={() => handleClickParticipar(e._id)} className={`w-full p-2 mt-2 rounded-xl shadow-md focus:outline-none font-bold ${participando ? 'bg-gray-400 text-white' : 'bg-yellow text-darkBlue'}`}>
+                    {participando ? 'Adicionado à Aula' : 'Participar'}
+                  </button>
                 </div>
-                <button onClick={handleClickParticipar} className={`w-full p-2 mt-2 rounded-xl shadow-md focus:outline-none font-bold ${ participando ? 'bg-gray-400 text-white' : 'bg-yellow text-darkBlue'}`}>
-                  {participando ? 'Adicionado à Aula' : 'Participar'}
-                </button>
+                <div className="absolute top-3 right-3 p-2 bg-white rounded-xl">
+                  + {e.pointsToEarn} pts
+                </div>
               </div>
-              <img className="w-1/2" src={e.photoUrl} alt="Surf Lesson"/>
-            </div>
+            ))
           )}
         </div>
 
 
-        <div>
-          {users.map((user, index) => (
-            <div key={index}>
-              <p>ID: {user._id}</p>
-              <p>Nome: {user.name}</p>
-              <img className="w-1/2" src={user.photoLink} alt="Surf Lesson"/>
-            </div>
-          ))}
-        </div>
       </div>
 
       <div className="bottom-0 fixed w-full">
