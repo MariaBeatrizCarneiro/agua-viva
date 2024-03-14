@@ -1,10 +1,13 @@
 import Navbar from "../components/Navbar";
 import Menu from "../components/Menu";
+import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 import { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
   CardFooter,
+  CardHeader,
 } from "@/components/ui/card";
 
 import {
@@ -51,15 +54,22 @@ export default function Profile() {
     fetchUserData();
   }, []);
 
+  function formatDateTime(date) {
+    const formattedDate = format(new Date(date), "dd 'de' MMMM 'às' hh:mm a", { locale: ptBR });
+    const parts = formattedDate.split(' ');
+    parts[2] = parts[2].charAt(0).toUpperCase() + parts[2].slice(1);
+    return parts.join(' ');
+  }
+
   return (
     <main>
       <div className="top-0 fixed w-full mb-2 z-40">
         <Navbar />
       </div>
-      <div className="top-20 mb-96 fixed bg-white z-40 w-full">
+      <div className="top-16 mb-96 fixed bg-white z-40 w-full">
         {userData && (
           <div className="flex flex-row gap-4 py-1 m-4 items-center">
-            <img className="rounded-2xl h-48 w-48" src={userData.photoLink} alt="User" />
+            <img className="rounded-3xl h-48 w-48" src={userData.photoLink} alt="User" />
             <div className="flex flex-col gap-2">
               <p className="text-2xl">{userData.name}</p>
               <p>{userData.age}</p>
@@ -74,21 +84,20 @@ export default function Profile() {
           </div>
         )}
       </div>
-      <div className="mt-96 mb-24">
-        <h1 className="m-4 text-2xl">As minhas aulas</h1>
+      <div className="mt-96 mb-24 ml-4 mr-4">
+        <h1 className="m-3 text-2xl font-normal">As minhas aulas</h1>
         <Carousel>
           <CarouselContent className="pl-0">
             {classesData && classesData.userClasses.map((userClass) => (
               <CarouselItem key={userClass._id} className="basis-1/2">
-                <Card className="rounded-xl">
+                <Card className="rounded-xl bg-gray-100 overflow-hidden shadow-lg">
                   <CardContent>
-                    <p>Date: {new Date(userClass.date).toLocaleDateString()}</p>
-                    <p>Duration: {userClass.duration}</p>
-                    <p>Location: {userClass.location}</p>
-                    <p>Points to Earn: {userClass.pointsToEarn}</p>
+                    <button className="flex rounded-3xl bg-white shadow-md text-center align-center text-darkBlue font-light text-sm px-2 py-1 w-fit mt-2 ml-2 items-end">x</button>
+                    <p className="mb-2 font-semibold text-darkBlue">{formatDateTime(userClass.date)}</p>
+                    <p> <span className="font-semibold text-darkBlue">Duração:</span> {userClass.duration}</p>
+                    <p> <span className="font-semibold text-darkBlue">Local:</span> {userClass.location}</p>
                   </CardContent>
                   <CardFooter>
-                    <p>Organizer: {userClass.organizer}</p>
                   </CardFooter>
                 </Card>
               </CarouselItem>
