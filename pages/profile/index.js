@@ -66,7 +66,7 @@ export default function Profile() {
       <div className="top-0 fixed w-full mb-2 z-40">
         <Navbar />
       </div>
-      <div className="top-16 mb-96 fixed bg-white z-40 w-full">
+      <div className="top-24 mb-96 fixed bg-white z-40 w-full">
         {userData && (
           <div className="flex flex-row gap-4 py-1 m-4 items-center">
             <img className="rounded-3xl h-48 w-48" src={userData.photoLink} alt="User" />
@@ -127,10 +127,9 @@ export default function Profile() {
               <CarouselItem key={userCoupon._id} className="basis-1/2">
                 <Card className="rounded-xl">
                   <CardContent>
-                    <p className="text-6xl">{userCoupon.value}<span className="text-4xl">%</span></p>
+                    <p className="text-5xl text-darkBlue font-semibold">{userCoupon.value}<span className="text-4xl">%</span></p>
                     <p>{userCoupon.description}</p>
-                    <p>Points Required: {userCoupon.pointsRequired}</p>
-                    <p>Redeemed: {userCoupon.redeemed ? "Yes" : "No"}</p>
+                    <p>{userData.points}/{userCoupon.pointsRequired}</p>
                   </CardContent>
                 </Card>
               </CarouselItem>
