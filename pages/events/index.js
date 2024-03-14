@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { getPoints, increasePoints } from '../../utils/globals.js';
 import Navbar from "../components/Navbar";
 import Menu from "../components/Menu";
 import { format } from 'date-fns';
@@ -51,7 +52,16 @@ export default function Events() {
       updatedParticipatingEvents[eventId] = !prevState[eventId];
       return updatedParticipatingEvents;
     });
+  
+    events.filter(e => e._id === eventId).map(u => {
+      if (!participatingEvents[eventId]) {
+        increasePoints(u.pointsToEarn);
+      } else {
+        increasePoints(-(u.pointsToEarn));
+      }
+    });
   };
+  
 
   const toggleParticipantsList = (eventId) => {
     setSelectedEventId(prevId => (prevId === eventId ? null : eventId));
@@ -79,7 +89,10 @@ export default function Events() {
       </div>
 
       <div className="my-24 mx-4 flex-grow ">
-        <h1 className="text-3xl text-darkBlue font-bold py-3">Próximos Eventos:</h1>
+        <div className='flex items-center'>
+          <p className='text-5xl ps-3'>🗓️</p>
+          <h1 className="text-3xl text-darkBlue font-bold py-3 ps-3">Próximos Eventos:</h1>
+        </div>
 
         <div>
           {events.length === 0 ? (

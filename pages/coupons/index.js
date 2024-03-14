@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { points } from '../../utils/globals.js';
 import Navbar from "../components/Navbar";
 import Menu from "../components/Menu";
 
@@ -59,7 +60,7 @@ export default function Coupons() {
               <div className="max-w-lg mx-auto my-6 bg-gray-100 rounded-xl overflow-hidden shadow-lg relative" key={e._id}>
                 <div className="px-4 py-4 absolute top-0 left-0 w-full">
                   <div className="h-4 bg-white rounded-xl overflow-hidden">
-                    <div className="bg-yellow h-96 w-full " style={{ width: `${users.length > 0 ? (users[0].points) / e.pointsRequired * 100 : 0}%` }} />
+                    <div className="bg-yellow h-96 w-full " style={{ width: `${users.length > 0 ? (points) / e.pointsRequired * 100 : 0}%` }} />
                   </div>
                 </div>
                 <div className="pt-10 pb-5 px-5 pe-20">
@@ -71,12 +72,12 @@ export default function Coupons() {
                   {users.filter(user => user._id === e.userId).map(u => (
                     <div className='text-right' key={u._id}>
                       <div className="text-darkBlue">
-                        <span className="font-bold text-darkBlue"></span>{u.points} / 
+                        <span className="font-bold text-darkBlue"></span>{points} / 
                         <span className="font-bold text-darkBlue"></span> {e.pointsRequired} pts
                       </div>
 
                       <div className='pt-2'>
-                        {u.points >= e.pointsRequired ? (
+                        {points >= e.pointsRequired ? (
                           <div>
                             <p>Cupão conquistado!</p>
                             <p className='text-5xl py-2'>🥳</p>
